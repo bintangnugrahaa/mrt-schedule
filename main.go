@@ -1,9 +1,20 @@
 package main
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/bintangnugrahaa/mrt-schedule/modules/station"
+	"github.com/gin-gonic/gin"
+)
 
 func main() {
-	var router = gin.Default()
+	InitiateRoute()
+}
 
-	router.Run(":8080")
+func InitiateRoute() {
+	var (
+		route = gin.Default()
+		api   = route.Group("/v1/api")
+	)
+	station.Initiate(api)
+
+	route.Run(":8080")
 }
