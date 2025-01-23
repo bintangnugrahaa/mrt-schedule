@@ -1,6 +1,9 @@
 package station
 
 import (
+	"net/http"
+
+	"github.com/bintangnugrahaa/mrt-schedule/common/response"
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,8 +19,20 @@ func Initiate(router *gin.RouterGroup) {
 func GetAllStation(c *gin.Context, service Service) {
 	datas, err := service.GetAllStation()
 	if err != nil {
-		// handle error
+		c.JSON(
+			http.StatusBadRequest, response.APIResponse{
+				Success: false,
+				Message: err.Error(),
+				Data:    nil,
+			})
 	}
 
-	// balikin response
+	c.JSON(
+		http.StatusOK,
+		response.APIResponse{
+			Success: true,
+			Message: "Successfully get all station",
+			Data:    datas,
+		},
+	)
 }
