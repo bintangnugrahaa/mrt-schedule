@@ -2,6 +2,7 @@ package station
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 	"time"
 
@@ -9,7 +10,7 @@ import (
 )
 
 type Service interface {
-	GetAllStation() (response []StationResponse, err error)
+	GetAllStation() ([]StationResponse, error)
 }
 
 type service struct {
@@ -24,18 +25,21 @@ func NewService() Service {
 	}
 }
 
-func (s *service) GetAllStation() (response []StationResponse, err error) {
+func (s *service) GetAllStation() ([]StationResponse, error) {
 	url := "https://www.jakartamrt.co.id/id/val/stasiuns"
-	return
 
 	byteResponse, err := client.DoRequest(s.client, url)
 	if err != nil {
-		return
+		return nil, err
 	}
 
 	var stations []Station
 	err = json.Unmarshal(byteResponse, &stations)
+	if err != nil {
+		return nil, errors.New("gagal mem-parsing response stasiun")
+	}
 
+	var response []StationResponse
 	for _, item := range stations {
 		response = append(response, StationResponse{
 			Id:   item.Id,
@@ -43,5 +47,5 @@ func (s *service) GetAllStation() (response []StationResponse, err error) {
 		})
 	}
 
-	return
+	return response, nil
 }
