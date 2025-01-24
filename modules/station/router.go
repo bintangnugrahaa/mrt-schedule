@@ -46,7 +46,7 @@ func GetAllStation(c *gin.Context, service Service) {
 func CheckSchedulesByStation(c *gin.Context, service Service) {
 	id := c.Param("id")
 
-	datas, err := service.CheckSchedulesByStation(id)
+	datas, err := service.CheckScheduleByStation(id)
 	if err != nil {
 		c.JSON(
 			http.StatusBadRequest, response.APIResponse{
